@@ -1,12 +1,17 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { add, remove, toggle, toggleAll, changeTitle } from './redux/actions/app'
 import './App.css'
 
-export default () => {
-  const [uid, setUid] = React.useState(0)
-	const [todos, setTodos] = React.useState([])
+const App = ({todos, add, remove, toggle, toggleAll, changeTitle}) => {
 
-  console.log(todos);
-  
+	const handleSubmit = e => {
+		if (e.key == 'Enter') {
+			add(e.currentTarget.value)
+			e.currentTarget.value = ''
+		}
+	}
+
 	return (
 		<section>
 			<div id="app">
@@ -14,19 +19,28 @@ export default () => {
 				<div>
 					<div id="header">
 						<input type="checkbox" />
-						<input type="text" onKeyPress={handleSubmit(uid, setUid, todos, setTodos)} />
+						<input
+							type="text"
+							onKeyPress={handleSubmit}
+						/>
 					</div>
 					<div id="body">
 						<ul id="todos">
 							{todos.map(todo => (
-								<li className={"todo " + (todo.isDone ? "done" : '')} key={todo.id}>
-									<input type="checkbox" defaultChecked={todo.isDone} onClick={handleItemToggle(todo.id, todos, setTodos)}/>
+								<li className={'todo ' + (todo.isDone ? 'done' : '')} key={todo.id}>
+									<input
+										type="checkbox"
+										defaultChecked={todo.isDone}
+										onClick={() => toggle(todo.id)}
+									/>
 									<input
 										type="text"
 										value={todo.title}
-										onChange={handleItemTitleChange(todo.id, todos, setTodos)}
+										onChange={e => changeTitle(todo.id, e.currentTarget.value)}
 									/>
-									<button onClick={hadleItemDelete(todo.id, todos, setTodos)}>X</button>
+									<button onClick={() => remove(todo.id)}>
+										X
+									</button>
 								</li>
 							))}
 						</ul>
@@ -48,35 +62,23 @@ export default () => {
 	)
 }
 
-const handleSubmit = (uid, setUid, todos, setTodos) => e => {
-	if (e.key == 'Enter') {
-		setTodos([{ id: uid, title: e.currentTarget.value, isDone: false }, ...todos])
-		e.currentTarget.value = ''
-  }
-  setUid(uid + 1)
+const mapStateToProps = state => {
+	return {
+		todos: state.app.todos
+	}
 }
 
-const handleItemTitleChange = (id, todos, setTodos) => e => {
-	setTodos([
-		...todos.map(todo =>
-			todo.id == id
-				? { id: todo.id, title: e.currentTarget.value, isDone: todo.isDone }
-				: todo
-		)
-	])
+const mapDispatchToProps = dispatch => {
+	return {
+		add: title => dispatch(add(title)),
+		remove: id => dispatch(remove(id)),
+		toggle: id => dispatch(toggle(id)),
+		changeTitle: (id, title) => dispatch(changeTitle(id, title)),
+		toggleAll
+	}
 }
 
-const handleItemToggle = (id, todos, setTodos) => e => {
-  setTodos([
-		...todos.map(todo =>
-			todo.id == id
-				? { id: todo.id, title: todo.title, isDone: !todo.isDone }
-				: todo
-		)
-	])
-}
-
-const hadleItemDelete = (id, todos, setTodos) => e => {
-  setTodos([
-		...todos.filter(todo => todo.id != id)])
-}
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(App)

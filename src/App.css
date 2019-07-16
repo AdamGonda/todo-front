@@ -9,6 +9,7 @@ section {
 #app {
   text-align: center;
   border: 1px solid red;
+  font-size: 20px;
 }
 #todos {
   list-style-type: none;
