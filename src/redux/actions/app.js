@@ -3,6 +3,8 @@ export const REMOVE = 'REMOVE'
 export const TOGGLE = 'TOGGLE'
 export const TOGGLE_ALL = 'TOGGLE_ALL'
 export const CHANGE_TITLE = 'CHANGE_TITLE'
+export const CHANGE_FILTER = 'CHANGE_FILTER'
+export const FILTER_TYPES = { ALL: 'ALL', ACTIVE: 'ACTIVE', DONE: 'DONE' }
 
 export const add = title => ({ type: ADD, payload: title })
 
@@ -23,4 +25,9 @@ export const changeTitle = (id, title) => ({
 
 export const toggleAll = () => ({
 	type: TOGGLE_ALL
+})
+
+export const changeFilter = filter => ({
+	type: CHANGE_FILTER,
+	payload: filter
 })

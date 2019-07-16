@@ -1,13 +1,14 @@
-import { ADD, REMOVE, TOGGLE, TOGGLE_ALL, CHANGE_TITLE } from '../actions/app'
+import { ADD, REMOVE, TOGGLE, TOGGLE_ALL, CHANGE_TITLE, CHANGE_FILTER, FILTER_TYPES } from '../actions/app'
 
 const initState = {
+  activeFilter: FILTER_TYPES.ALL,
 	isAllTaggled: false,
 	nextId: 3,
 	todos: [
 		{ id: 0, title: 'one', isDone: false },
 		{ id: 1, title: 'two', isDone: true },
 		{ id: 2, title: 'three', isDone: false }
-	]
+  ]
 }
 
 export const app = (state = initState, action) => {
@@ -57,6 +58,12 @@ export const app = (state = initState, action) => {
 				...state,
 				isAllTaggled: !state.isAllTaggled,
 				todos: [...state.todos.map(todo => ({ ...todo, isDone: !state.isAllTaggled }))]
+      }
+      
+		case CHANGE_FILTER:
+			return {
+				...state,
+				activeFilter: action.payload
 			}
 
 		default:
