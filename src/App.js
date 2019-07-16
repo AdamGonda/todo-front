@@ -2,13 +2,11 @@ import React from 'react'
 import './App.css'
 
 export default () => {
-	const [todos, setTodos] = React.useState([
-		{ id: 1, title: 'one', isDone: false },
-		{ id: 2, title: 'two', isDone: true },
-		{ id: 3, title: 'three', isDone: false },
-		{ id: 4, title: 'four', isDone: true }
-	])
+  const [uid, setUid] = React.useState(0)
+	const [todos, setTodos] = React.useState([])
 
+  console.log(todos);
+  
 	return (
 		<section>
 			<div id="app">
@@ -16,7 +14,7 @@ export default () => {
 				<div>
 					<div id="header">
 						<input type="checkbox" />
-						<input type="text" onKeyPress={handleSubmit(todos, setTodos)} />
+						<input type="text" onKeyPress={handleSubmit(uid, setUid, todos, setTodos)} />
 					</div>
 					<div id="body">
 						<ul id="todos">
@@ -50,11 +48,12 @@ export default () => {
 	)
 }
 
-const handleSubmit = (todos, setTodos) => e => {
+const handleSubmit = (uid, setUid, todos, setTodos) => e => {
 	if (e.key == 'Enter') {
-		setTodos([{ id: todos.length + 1, title: e.currentTarget.value, isDone: false }, ...todos])
+		setTodos([{ id: uid, title: e.currentTarget.value, isDone: false }, ...todos])
 		e.currentTarget.value = ''
-	}
+  }
+  setUid(uid + 1)
 }
 
 const handleItemTitleChange = (id, todos, setTodos) => e => {
