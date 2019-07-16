@@ -53,11 +53,15 @@ export const app = (state = initState, action) => {
 			}
 
 		case TOGGLE_ALL:
-      return {
-				...state,
-				isAllTaggled: !state.isAllTaggled,
-				todos: [...state.todos.map(todo => ({ ...todo, isDone: !state.isAllTaggled }))]
-			}
+      if(state.todos.length > 0){
+        return {
+          ...state,
+          isAllTaggled: !state.isAllTaggled,
+          todos: [...state.todos.map(todo => ({ ...todo, isDone: !state.isAllTaggled }))]
+        }
+      }else{
+        return state
+      }
 
 		default:
 			return state
