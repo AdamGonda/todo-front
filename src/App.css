@@ -22,3 +22,11 @@ section {
 .done > input:nth-last-child(2) {
   text-decoration: line-through
 }
+
+#toggleAll {
+
+}
+
+.active {
+  border: 1px solid red;
+}

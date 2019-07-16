@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import { add, remove, toggle, toggleAll, changeTitle } from './redux/actions/app'
 import './App.css'
 
-const App = ({todos, add, remove, toggle, toggleAll, changeTitle}) => {
-
+const App = ({ todos, add, remove, toggle, toggleAll, changeTitle, isAllTaggled }) => {
 	const handleSubmit = e => {
 		if (e.key == 'Enter') {
 			add(e.currentTarget.value)
@@ -18,31 +17,33 @@ const App = ({todos, add, remove, toggle, toggleAll, changeTitle}) => {
 				<h1 id="title">todos</h1>
 				<div>
 					<div id="header">
-						<input type="checkbox" />
-						<input
-							type="text"
-							onKeyPress={handleSubmit}
-						/>
+						<span id="toggleAll" onClick={toggleAll} className={(isAllTaggled == true ? 'active' : '')} >V</span>
+						<input type="text" onKeyPress={handleSubmit} />
 					</div>
 					<div id="body">
 						<ul id="todos">
-							{todos.map(todo => (
-								<li className={'todo ' + (todo.isDone ? 'done' : '')} key={todo.id}>
-									<input
-										type="checkbox"
-										defaultChecked={todo.isDone}
-										onClick={() => toggle(todo.id)}
-									/>
-									<input
-										type="text"
-										value={todo.title}
-										onChange={e => changeTitle(todo.id, e.currentTarget.value)}
-									/>
-									<button onClick={() => remove(todo.id)}>
-										X
-									</button>
-								</li>
-							))}
+							{todos.map(todo => {
+								return (
+									<li
+										className={'todo ' + (todo.isDone ? 'done' : '')}
+										key={todo.id}
+									>
+										<input
+											type="checkbox"
+											checked={todo.isDone}
+											onClick={() => toggle(todo.id)}
+										/>
+										<input
+											type="text"
+											value={todo.title}
+											onChange={e =>
+												changeTitle(todo.id, e.currentTarget.value)
+											}
+										/>
+										<button onClick={() => remove(todo.id)}>X</button>
+									</li>
+								)
+							})}
 						</ul>
 						<div id="footer">
 							<span id="items-left">
@@ -64,6 +65,7 @@ const App = ({todos, add, remove, toggle, toggleAll, changeTitle}) => {
 
 const mapStateToProps = state => {
 	return {
+		isAllTaggled: state.app.isAllTaggled,
 		todos: state.app.todos
 	}
 }
@@ -74,7 +76,7 @@ const mapDispatchToProps = dispatch => {
 		remove: id => dispatch(remove(id)),
 		toggle: id => dispatch(toggle(id)),
 		changeTitle: (id, title) => dispatch(changeTitle(id, title)),
-		toggleAll
+		toggleAll: () => dispatch(toggleAll())
 	}
 }
 
