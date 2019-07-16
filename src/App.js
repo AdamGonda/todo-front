@@ -28,7 +28,7 @@ export default () => {
 										value={todo.title}
 										onChange={handleItemTitleChange(todo.id, todos, setTodos)}
 									/>
-									<button>X</button>
+									<button onClick={hadleItemDelete(todo.id, todos, setTodos)}>X</button>
 								</li>
 							))}
 						</ul>
@@ -75,4 +75,9 @@ const handleItemToggle = (id, todos, setTodos) => e => {
 				: todo
 		)
 	])
+}
+
+const hadleItemDelete = (id, todos, setTodos) => e => {
+  setTodos([
+		...todos.filter(todo => todo.id != id)])
 }
