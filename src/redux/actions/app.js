@@ -7,7 +7,18 @@ export const CHANGE_FILTER = 'CHANGE_FILTER'
 export const CLEAR_DONE_TODOS = 'CLEAR_DONE_TODOS'
 export const FILTER_TYPES = { ALL: 'ALL', ACTIVE: 'ACTIVE', DONE: 'DONE' }
 
-export const add = title => ({ type: ADD, payload: title })
+export const add = title => (dispatch, getState) => {
+	fetch('http://localhost:8080/addTodo', {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ title })
+	})
+		.then(() => dispatch({ type: ADD, payload: title }))
+		.catch(err => console.log(err))
+}
 
 export const remove = id => ({
 	type: REMOVE,
@@ -34,5 +45,5 @@ export const changeFilter = filter => ({
 })
 
 export const clearDoneTodos = () => ({
-	type: CLEAR_DONE_TODOS,
+	type: CLEAR_DONE_TODOS
 })
