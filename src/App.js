@@ -21,8 +21,8 @@ export default () => {
 					<div id="body">
 						<ul id="todos">
 							{todos.map(todo => (
-								<li className="todo" key={todo.id}>
-									<input type="checkbox" />
+								<li className={"todo " + (todo.isDone ? "done" : '')} key={todo.id}>
+									<input type="checkbox" defaultChecked={todo.isDone} onClick={handleItemToggle(todo.id, todos, setTodos)}/>
 									<input
 										type="text"
 										value={todo.title}
@@ -62,6 +62,16 @@ const handleItemTitleChange = (id, todos, setTodos) => e => {
 		...todos.map(todo =>
 			todo.id == id
 				? { id: todo.id, title: e.currentTarget.value, isDone: todo.isDone }
+				: todo
+		)
+	])
+}
+
+const handleItemToggle = (id, todos, setTodos) => e => {
+  setTodos([
+		...todos.map(todo =>
+			todo.id == id
+				? { id: todo.id, title: todo.title, isDone: !todo.isDone }
 				: todo
 		)
 	])
