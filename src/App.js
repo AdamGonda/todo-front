@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { TODO_STAUSES } from './redux/reducers/app'
 import {
 	add,
 	remove,
@@ -8,7 +9,8 @@ import {
 	changeTitle,
 	changeFilter,
 	FILTER_TYPES,
-	clearDoneTodos
+	clearDoneTodos,
+	fetchTodos
 } from './redux/actions/app'
 import './App.css'
 
@@ -22,8 +24,14 @@ const App = ({
 	isAllTaggled,
 	changeFilter,
 	activeFilter,
-	clearDoneTodos
+	clearDoneTodos,
+	initTodos
 }) => {
+
+	React.useEffect(() => {
+    initTodos()
+  }, []);
+
 	const handleSubmit = e => {
 		if (e.key == 'Enter') {
 			add(e.currentTarget.value)
@@ -31,6 +39,8 @@ const App = ({
 		}
 	}
 
+	console.log(todos);
+	
 	return (
 		<section>
 			<div id="app">
@@ -55,21 +65,23 @@ const App = ({
 									if (activeFilter == FILTER_TYPES.ALL) {
 										return true
 									} else if (activeFilter == FILTER_TYPES.ACTIVE) {
-										return todo.isDone == false
-									} else if (activeFilter == FILTER_TYPES.DONE) {
-										return todo.isDone == true
+										return todo.status == TODO_STAUSES.ACTIVE
+
+									} else if (activeFilter == FILTER_TYPES.COMPLETE) {
+
+										return todo.status == TODO_STAUSES.COMPLETE
 									}
 								})
 								.map(todo => {
 									return (
 										<li
-											className={'todo ' + (todo.isDone ? 'done' : '')}
+											className={'todo ' + (todo.status == TODO_STAUSES.COMPLETE ? 'done' : '')}
 											key={todo.id}
 										>
 											<input
 												type="checkbox"
-												checked={todo.isDone}
-												onClick={() => toggle(todo.id)}
+												checked={todo.status == TODO_STAUSES.COMPLETE}
+												onClick={() => toggle(todo.id, todo.status)}
 											/>
 											<input
 												type="text"
@@ -101,8 +113,8 @@ const App = ({
 									Active
 								</button>
 								<button
-									className={activeFilter == FILTER_TYPES.DONE ? 'active' : ''}
-									onClick={() => changeFilter(FILTER_TYPES.DONE)}
+									className={activeFilter == FILTER_TYPES.COMPLETE ? 'active' : ''}
+									onClick={() => changeFilter(FILTER_TYPES.COMPLETE)}
 								>
 									Completed
 								</button>
@@ -128,11 +140,12 @@ const mapDispatchToProps = dispatch => {
 	return {
 		add: title => dispatch(add(title)),
 		remove: id => dispatch(remove(id)),
-		toggle: id => dispatch(toggle(id)),
+		toggle: (id, status) => dispatch(toggle(id, status)),
 		changeTitle: (id, title) => dispatch(changeTitle(id, title)),
 		toggleAll: () => dispatch(toggleAll()),
 		changeFilter: type => dispatch(changeFilter(type)),
-		clearDoneTodos: () => dispatch(clearDoneTodos())
+		clearDoneTodos: () => dispatch(clearDoneTodos()),
+		initTodos: () => dispatch(fetchTodos()),
 	}
 }
 
