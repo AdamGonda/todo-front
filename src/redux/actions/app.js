@@ -8,7 +8,18 @@ export const SET_TODOS = 'FETCH_TODOS'
 export const CHANGE_TITLE = 'CHANGE_TITLE'
 export const CHANGE_FILTER = 'CHANGE_FILTER'
 export const CLEAR_DONE_TODOS = 'CLEAR_DONE_TODOS'
+export const CHANGE_VALUE_ON_TYPEING = 'CHANGE_VALUE_ON_TYPEING'
 export const FILTER_TYPES = { ALL: 'ALL', ACTIVE: 'ACTIVE', COMPLETE: 'COMPLETE' }
+
+export const changeTitleOnTyping = (id, title) => ({
+	type: CHANGE_VALUE_ON_TYPEING,
+	payload: {id, title}
+})
+
+export const changeFilter = filter => ({
+	type: CHANGE_FILTER,
+	payload: filter
+})
 
 const _fetchTodos = dispatch => {
 	makeGetRequest(
@@ -37,20 +48,14 @@ export const toggle = (id, status) => (dispatch, getState) => {
 	makeRequest('PUT', `todos/${id}/toggle_status?status=${status}`, null, () => _fetchTodos(dispatch), err => console.log(err))
 }
 
-export const changeTitle = (id, title) => ({
-	type: CHANGE_TITLE,
-	payload: { title, id }
-})
+export const changeTitle = (id, title) => (dispatch, getState) => {
+	makeRequest('PUT', `todos/${id}/?todo-title=${title}`, null, () => _fetchTodos(dispatch), err => console.log(err))
+}
+
+export const clearCompletedTodos = () => (dispatch, getState) => {
+	makeRequest('DELETE', `todos/completed`, null, () => _fetchTodos(dispatch), err => console.log(err))
+}
 
 export const toggleAll = () => ({
 	type: TOGGLE_ALL
-})
-
-export const changeFilter = filter => ({
-	type: CHANGE_FILTER,
-	payload: filter
-})
-
-export const clearDoneTodos = () => ({
-	type: CLEAR_DONE_TODOS
 })

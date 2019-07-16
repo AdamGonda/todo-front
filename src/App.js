@@ -7,9 +7,10 @@ import {
 	toggle,
 	toggleAll,
 	changeTitle,
+	changeTitleOnTyping,
 	changeFilter,
 	FILTER_TYPES,
-	clearDoneTodos,
+	clearCompletedTodos,
 	fetchTodos
 } from './redux/actions/app'
 import './App.css'
@@ -21,6 +22,7 @@ const App = ({
 	toggle,
 	toggleAll,
 	changeTitle,
+	changeTitleOnTyping,
 	isAllTaggled,
 	changeFilter,
 	activeFilter,
@@ -39,8 +41,6 @@ const App = ({
 		}
 	}
 
-	console.log(todos);
-	
 	return (
 		<section>
 			<div id="app">
@@ -86,7 +86,8 @@ const App = ({
 											<input
 												type="text"
 												value={todo.title}
-												onChange={e =>
+												onChange={e => changeTitleOnTyping(todo.id, e.currentTarget.value)}
+												onBlur={e =>
 													changeTitle(todo.id, e.currentTarget.value)
 												}
 											/>
@@ -144,8 +145,9 @@ const mapDispatchToProps = dispatch => {
 		changeTitle: (id, title) => dispatch(changeTitle(id, title)),
 		toggleAll: () => dispatch(toggleAll()),
 		changeFilter: type => dispatch(changeFilter(type)),
-		clearDoneTodos: () => dispatch(clearDoneTodos()),
+		clearDoneTodos: () => dispatch(clearCompletedTodos()),
 		initTodos: () => dispatch(fetchTodos()),
+		changeTitleOnTyping: (id, value) => dispatch(changeTitleOnTyping(id, value))
 	}
 }
 
