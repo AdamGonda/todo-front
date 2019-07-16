@@ -4,17 +4,17 @@ const initState = {
 	isAllTaggled: false,
 	nextId: 3,
 	todos: [
-    { id: 0, title: 'one', isDone: false },
-    { id: 1, title: 'two', isDone: true },
-    { id: 2, title: 'three', isDone: false },
-  ]
+		{ id: 0, title: 'one', isDone: false },
+		{ id: 1, title: 'two', isDone: true },
+		{ id: 2, title: 'three', isDone: false }
+	]
 }
 
 export const app = (state = initState, action) => {
 	switch (action.type) {
 		case ADD:
 			return {
-        ...state,
+				...state,
 				nextId: state.nextId + 1,
 				todos: [
 					{ id: state.nextId + 1, title: action.payload, isDone: false },
@@ -53,15 +53,11 @@ export const app = (state = initState, action) => {
 			}
 
 		case TOGGLE_ALL:
-      if(state.todos.length > 0){
-        return {
-          ...state,
-          isAllTaggled: !state.isAllTaggled,
-          todos: [...state.todos.map(todo => ({ ...todo, isDone: !state.isAllTaggled }))]
-        }
-      }else{
-        return state
-      }
+			return {
+				...state,
+				isAllTaggled: !state.isAllTaggled,
+				todos: [...state.todos.map(todo => ({ ...todo, isDone: !state.isAllTaggled }))]
+			}
 
 		default:
 			return state

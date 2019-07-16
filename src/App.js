@@ -17,7 +17,15 @@ const App = ({ todos, add, remove, toggle, toggleAll, changeTitle, isAllTaggled 
 				<h1 id="title">todos</h1>
 				<div>
 					<div id="header">
-						<span id="toggleAll" onClick={toggleAll} className={(isAllTaggled == true ? 'active' : '')} >V</span>
+						{todos.length <= 0 ? null : (
+							<span
+								id="toggleAll"
+								onClick={toggleAll}
+								className={isAllTaggled == true ? 'active' : ''}
+							>
+								V
+							</span>
+						)}
 						<input type="text" onKeyPress={handleSubmit} />
 					</div>
 					<div id="body">
