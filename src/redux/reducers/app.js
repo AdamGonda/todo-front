@@ -1,7 +1,9 @@
 import {
 	FILTER_TYPES,
 	SET_TODOS,
-	CHANGE_VALUE_ON_TYPEING
+	CHANGE_VALUE_ON_TYPEING,
+	TOGGLE_ALL,
+	CHANGE_FILTER
 } from '../actions/app'
 export const TODO_STAUSES = { ACTIVE: 'ACTIVE', COMPLETE: 'COMPLETE' }
 
@@ -18,6 +20,18 @@ export const app = (state = initState, action) => {
 			return {
 				...state,
 				todos: action.payload
+			}
+
+		case CHANGE_FILTER:
+			return {
+				...state,
+				activeFilter: action.payload
+			}
+
+		case TOGGLE_ALL:
+			return {
+				...state,
+				isAllTaggled: !state.isAllTaggled
 			}
 
 		case CHANGE_VALUE_ON_TYPEING:
