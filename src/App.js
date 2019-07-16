@@ -7,7 +7,8 @@ import {
 	toggleAll,
 	changeTitle,
 	changeFilter,
-	FILTER_TYPES
+	FILTER_TYPES,
+	clearDoneTodos
 } from './redux/actions/app'
 import './App.css'
 
@@ -20,7 +21,8 @@ const App = ({
 	changeTitle,
 	isAllTaggled,
 	changeFilter,
-	activeFilter
+	activeFilter,
+	clearDoneTodos
 }) => {
 	const handleSubmit = e => {
 		if (e.key == 'Enter') {
@@ -105,7 +107,7 @@ const App = ({
 									Completed
 								</button>
 							</div>
-							<button>Clear completed</button>
+							<button onClick={() => clearDoneTodos()}>Clear completed</button>
 						</div>
 					</div>
 				</div>
@@ -129,7 +131,8 @@ const mapDispatchToProps = dispatch => {
 		toggle: id => dispatch(toggle(id)),
 		changeTitle: (id, title) => dispatch(changeTitle(id, title)),
 		toggleAll: () => dispatch(toggleAll()),
-		changeFilter: type => dispatch(changeFilter(type))
+		changeFilter: type => dispatch(changeFilter(type)),
+		clearDoneTodos: () => dispatch(clearDoneTodos())
 	}
 }
 

@@ -1,4 +1,4 @@
-import { ADD, REMOVE, TOGGLE, TOGGLE_ALL, CHANGE_TITLE, CHANGE_FILTER, FILTER_TYPES } from '../actions/app'
+import { ADD, REMOVE, TOGGLE, TOGGLE_ALL, CHANGE_TITLE, CHANGE_FILTER, FILTER_TYPES, CLEAR_DONE_TODOS } from '../actions/app'
 
 const initState = {
   activeFilter: FILTER_TYPES.ALL,
@@ -64,6 +64,12 @@ export const app = (state = initState, action) => {
 			return {
 				...state,
 				activeFilter: action.payload
+      }
+      
+		case CLEAR_DONE_TODOS:
+			return {
+				...state,
+				todos: [...state.todos.filter(todo => todo.isDone == false)]
 			}
 
 		default:
