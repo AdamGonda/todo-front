@@ -8,13 +8,26 @@ export const SET_TODOS = 'FETCH_TODOS'
 export const CHANGE_TITLE = 'CHANGE_TITLE'
 export const CHANGE_FILTER = 'CHANGE_FILTER'
 export const CLEAR_DONE_TODOS = 'CLEAR_DONE_TODOS'
-export const CHANGE_VALUE_ON_TYPEING = 'CHANGE_VALUE_ON_TYPEING'
+export const CHANGE_USERNAME_ON_TYPING = 'CHANGE_USERNAME_ON_TYPING'
+export const CHANGE_PASSWORD_ON_TYPING = 'CHANGE_PASSWORD_ON_TYPING'
+export const CHANGE_TITLE_ON_TYPEING = 'CHANGE_TITLE_ON_TYPEING'
 export const FILTER_TYPES = { ALL: 'ALL', ACTIVE: 'ACTIVE', COMPLETE: 'COMPLETE' }
 
 export const changeTitleOnTyping = (id, title) => ({
-	type: CHANGE_VALUE_ON_TYPEING,
+	type: CHANGE_TITLE_ON_TYPEING,
 	payload: { id, title }
 })
+
+export const changeUsernameOnTyping = (value) => ({
+	type: CHANGE_USERNAME_ON_TYPING,
+	payload: value
+})
+
+export const changePasswordOnTyping = (value) => ({
+	type: CHANGE_PASSWORD_ON_TYPING,
+	payload: value 
+})
+
 
 export const changeFilter = filter => ({
 	type: CHANGE_FILTER,
@@ -22,14 +35,20 @@ export const changeFilter = filter => ({
 })
 
 const _fetchTodos = dispatch => {
-	makeGetRequest(
-		'list',
-		res => {
-			res.sort((a, b) => a.id - b.id)
-			dispatch({ type: SET_TODOS, payload: res })
+	fetch("http://localhost:8080/list", {
+		method: "GET",
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: "Bearer " + localStorage.getItem("token")
 		},
-		err => console.log(err)
-	)
+	})
+		.then(res => res.json())
+		.then(json => {
+			json.sort((a, b) => a.id - b.id)
+			dispatch({ type: SET_TODOS, payload: json })
+		})
+		.catch(err => console.log(err))
 }
 
 export const fetchTodos = () => (dispatch, getState) => {
@@ -89,6 +108,22 @@ export const toggleAll = () => (dispatch, getState) => {
 			_fetchTodos(dispatch)
 			dispatch({type: TOGGLE_ALL})
 		},
+		err => console.log(err)
+	)
+}
+
+
+export const signin = (username, password) => (dispatch, getState) => {
+	makeRequest(
+		'POST',
+		'auth/signin',
+		{ username, password },
+		(res) => {
+			res.json().then(json => {
+				localStorage.setItem("token", json.token)
+				_fetchTodos(dispatch)
+			})
+		}, 
 		err => console.log(err)
 	)
 }

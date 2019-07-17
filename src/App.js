@@ -11,7 +11,10 @@ import {
 	changeFilter,
 	FILTER_TYPES,
 	clearCompletedTodos,
-	fetchTodos
+	fetchTodos, 
+	changeUsernameOnTyping,
+	changePasswordOnTyping,
+	signin
 } from './redux/actions/app'
 import './App.css'
 
@@ -27,22 +30,37 @@ const App = ({
 	changeFilter,
 	activeFilter,
 	clearDoneTodos,
-	initTodos
+	initTodos,
+	changeUsernameOnTyping,
+	changePasswordOnTyping,
+	username,
+	password,
+	signin
 }) => {
 
 	React.useEffect(() => {
     initTodos()
   }, []);
 
-	const handleSubmit = e => {
+  const handleSubmit = e => {
 		if (e.key == 'Enter') {
 			add(e.currentTarget.value)
 			e.currentTarget.value = ''
 		}
 	}
 
+	const handleSignin = e => {
+		signin(username, password)
+	}
+
 	return (
 		<section>
+
+			<div>
+				<input type="text" value={username} onChange={e => changeUsernameOnTyping(e.currentTarget.value)} placeholder="username"/>
+				<input type="text" value={password} onChange={e => changePasswordOnTyping(e.currentTarget.value)} placeholder="password"/>
+				<button type="submit" onClick={ handleSignin } >Submit</button>
+			</div>
 			<div id="app">
 				<h1 id="title">todos</h1>
 				<div>
@@ -133,7 +151,9 @@ const mapStateToProps = state => {
 	return {
 		activeFilter: state.app.activeFilter,
 		isAllTaggled: state.app.isAllTaggled,
-		todos: state.app.todos
+		todos: state.app.todos,
+		password: state.app.password,
+		username: state.app.username
 	}
 }
 
@@ -147,7 +167,10 @@ const mapDispatchToProps = dispatch => {
 		changeFilter: type => dispatch(changeFilter(type)),
 		clearDoneTodos: () => dispatch(clearCompletedTodos()),
 		initTodos: () => dispatch(fetchTodos()),
-		changeTitleOnTyping: (id, value) => dispatch(changeTitleOnTyping(id, value))
+		changeTitleOnTyping: (id, value) => dispatch(changeTitleOnTyping(id, value)),
+		changePasswordOnTyping: (value) => dispatch(changePasswordOnTyping(value)),
+		changeUsernameOnTyping:(value) => dispatch(changeUsernameOnTyping(value)),
+		signin: (username, password) => dispatch(signin(username, password))
 	}
 }
 

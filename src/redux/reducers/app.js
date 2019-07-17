@@ -1,7 +1,9 @@
 import {
 	FILTER_TYPES,
 	SET_TODOS,
-	CHANGE_VALUE_ON_TYPEING,
+	CHANGE_TITLE_ON_TYPEING,
+	CHANGE_USERNAME_ON_TYPING,
+	CHANGE_PASSWORD_ON_TYPING,
 	TOGGLE_ALL,
 	CHANGE_FILTER
 } from '../actions/app'
@@ -10,7 +12,9 @@ export const TODO_STAUSES = { ACTIVE: 'ACTIVE', COMPLETE: 'COMPLETE' }
 const initState = {
 	activeFilter: FILTER_TYPES.ALL,
 	isAllTaggled: false,
-	todos: []
+	todos: [],
+	password: '',
+	username: ''
 }
 
 export const app = (state = initState, action) => {
@@ -20,6 +24,18 @@ export const app = (state = initState, action) => {
 			return {
 				...state,
 				todos: action.payload
+			}
+
+		case CHANGE_USERNAME_ON_TYPING:
+			return {
+				...state,
+				username: action.payload 
+			}
+
+		case CHANGE_PASSWORD_ON_TYPING:
+			return {
+				...state,
+				password: action.payload
 			}
 
 		case CHANGE_FILTER:
@@ -34,7 +50,7 @@ export const app = (state = initState, action) => {
 				isAllTaggled: !state.isAllTaggled
 			}
 
-		case CHANGE_VALUE_ON_TYPEING:
+		case CHANGE_TITLE_ON_TYPEING:
 			return {
 				...state,
 				todos: state.todos.map(todo => {
