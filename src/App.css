@@ -3,7 +3,7 @@ section {
   place-items: center center;
 
   height: 100vh;
-  background-color:#f5f5f5;
+  background-color: #f5f5f5;
 }
 
 #app {
@@ -16,15 +16,13 @@ section {
 }
 
 .todo {
-  
 }
 
 .done > input:nth-last-child(2) {
-  text-decoration: line-through
+  text-decoration: line-through;
 }
 
 #toggleAll {
-
 }
 
 .active {
